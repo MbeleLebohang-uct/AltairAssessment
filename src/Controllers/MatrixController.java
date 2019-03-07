@@ -5,16 +5,34 @@ import Shared.Complex;
 import Views.MatrixView;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class MatrixController {
-    public MatrixController(){
-        JFrame frame = new JFrame("Matrix Calculator");
-        frame.setContentPane(new MatrixView().getMainPanel());
+    private MatrixView view;
+
+    public MatrixController(MatrixView view, String title){
+        this.view = view;
+
+        JFrame frame = new JFrame(title);
+        frame.setContentPane(view.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+        // Initialize the controller
+        initController();
     }
-    public Matrix mul(Matrix A, Matrix B){
+
+    /**
+     * Multiply the given matrix and return the results. That is C = AB. Note AB != BA according to algebra,
+     * so the order is important
+     * @param A
+     * @param B
+     * @return
+     */
+    private Matrix mul(Matrix A, Matrix B){
 
         Matrix newMatrix = new Matrix(A.getRows(), B.getColumns());
 
@@ -44,4 +62,120 @@ public class MatrixController {
         return newMatrix;
     }
 
+    /**
+     * Initialize the controller
+     */
+    private void initController(){
+        view.getCalculateButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Matrix matrixA = getMatrixA();
+                Matrix matrixB = getMatrixB();
+
+                Matrix matrixC = mul(matrixA, matrixB);
+
+                // Update the view with the results
+                setMatrixCView(matrixC);
+            }
+
+            /**
+             * Collect all the values in the field of matrix A and generate a matrix
+             * @return Matrix A object
+             */
+            private Matrix getMatrixA() {
+                // get item x,y real and imag values, and make a complex number with them. Add that to the matrix
+                double real, imag;
+                Matrix matrixA = new Matrix(2, 3);
+
+                // Get items in Row 1
+                real = (view.getRealAIndex11().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex11().getText());
+                imag = (view.getImagAIndex11().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex11().getText());
+                matrixA.add(new Complex(real, imag), 0, 0);
+
+                real = (view.getRealAIndex12().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex12().getText());
+                imag = (view.getImagAIndex12().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex12().getText());
+                matrixA.add(new Complex(real, imag), 0, 1);
+
+                real = (view.getRealAIndex13().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex13().getText());
+                imag = (view.getImagAIndex13().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex13().getText());
+                matrixA.add(new Complex(real, imag), 0, 2);
+
+                // Get the items in Row 2
+                real = (view.getRealAIndex21().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex21().getText());
+                imag = (view.getImagAIndex21().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex21().getText());
+                matrixA.add(new Complex(real, imag), 1, 0);
+
+                real = (view.getRealAIndex22().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex22().getText());
+                imag = (view.getImagAIndex22().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex22().getText());
+                matrixA.add(new Complex(real, imag), 1, 1);
+
+                real = (view.getRealAIndex23().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealAIndex23().getText());
+                imag = (view.getImagAIndex23().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagAIndex23().getText());
+                matrixA.add(new Complex(real, imag), 1, 2);
+
+                return matrixA;
+            }
+
+            /**
+             * Collect all the values in the field of matrix B and generate a matrix
+             * @return Matrix B object
+             */
+            private Matrix getMatrixB() {
+                // get item x,y real and imag values, and make a complex number with them. Add that to the matrix
+                double real, imag;
+                Matrix matrixB = new Matrix(3, 2);
+
+                // Get items in Row 1
+                real = (view.getRealBIndex11().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex11().getText());
+                imag = (view.getImagBIndex11().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex11().getText());
+                matrixB.add(new Complex(real, imag), 0, 0);
+
+                real = (view.getRealBIndex12().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex12().getText());
+                imag = (view.getImagBIndex12().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex12().getText());
+                matrixB.add(new Complex(real, imag), 0, 1);
+
+                // Get items in Row 2
+                real = (view.getRealBIndex21().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex21().getText());
+                imag = (view.getImagBIndex21().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex21().getText());
+                matrixB.add(new Complex(real, imag), 1, 0);
+
+                real = (view.getRealBIndex22().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex22().getText());
+                imag = (view.getImagBIndex22().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex22().getText());
+                matrixB.add(new Complex(real, imag), 1, 1);
+
+                // Get items in Row 3
+
+                real = (view.getRealBIndex31().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex31().getText());
+                imag = (view.getImagBIndex31().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex31().getText());
+                matrixB.add(new Complex(real, imag), 2, 0);
+
+                real = (view.getRealBIndex32().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getRealBIndex32().getText());
+                imag = (view.getImagBIndex32().getText().isEmpty()) ? 0.0 : Double.parseDouble(view.getImagBIndex32().getText());
+                matrixB.add(new Complex(real, imag), 2, 1);
+
+                return matrixB;
+            }
+
+            /**
+             * Set the values of the Matrix C field using the given matrix
+             * @param matrix
+             */
+            private void setMatrixCView(Matrix matrix) {
+                // Set the fields of row 1
+                view.getRealCIndex11().setText(matrix.getDataAt(0, 0).getReal() + "");
+                view.getImagCIndex11().setText(matrix.getDataAt(0, 0).getImag() + "");
+
+                view.getRealCIndex12().setText(matrix.getDataAt(0, 1).getReal() + "");
+                view.getImagCIndex12().setText(matrix.getDataAt(0, 1).getImag() + "");
+
+                // Set the fields of row 2
+                view.getRealCIndex21().setText(matrix.getDataAt(1, 0).getReal() + "");
+                view.getImagCIndex21().setText(matrix.getDataAt(1, 0).getImag() + "");
+
+                view.getRealCIndex22().setText(matrix.getDataAt(1, 1).getReal() + "");
+                view.getImagCIndex22().setText(matrix.getDataAt(1, 1).getImag() + "");
+            }
+        });
+
+    }
 }

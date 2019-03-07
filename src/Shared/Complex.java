@@ -1,8 +1,8 @@
 package Shared;
 
 public class Complex {
-    double real;
-    double imag;
+    private double real;
+    private double imag;
 
     public Complex(double real, double imag){
         this.real = real;
@@ -29,6 +29,14 @@ public class Complex {
         double newImag = (this.real * other.imag) + (other.real * this.imag);
 
         return new Complex(newReal, newImag);
+    }
+
+    public double getReal(){
+        return real;
+    }
+
+    public double getImag(){
+        return imag;
     }
 
 

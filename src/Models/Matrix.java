@@ -25,6 +25,18 @@ public class Matrix {
         data[row][column] = item;
     }
 
+    public Complex getDataAt(int row, int column){
+        return data[row][column];
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
     public void PrintMaxtrix(){
         for (Complex[] row: data) {
             System.out.print("| ");
@@ -38,18 +50,6 @@ public class Matrix {
             }
             System.out.print("|\n");
         }
-    }
-
-    public Complex getDataAt(int row, int column){
-        return data[row][column];
-    }
-
-    public int getRows() {
-        return rows;
-    }
-
-    public int getColumns() {
-        return columns;
     }
 
     @Override
