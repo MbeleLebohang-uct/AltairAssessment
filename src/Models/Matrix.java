@@ -36,26 +36,4 @@ public class Matrix {
     public int getColumns() {
         return columns;
     }
-
-    public void PrintMaxtrix(){
-        for (Complex[] row: data) {
-            System.out.print("| ");
-            for (Complex item: row) {
-                if(item != null){
-                    System.out.print(item.toString() + " ");
-                }
-                else{
-                    System.out.print("  ");
-                }
-            }
-            System.out.print("|\n");
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Matrix{" +
-                "data=" + Arrays.toString(data) +
-                '}';
-    }
 }

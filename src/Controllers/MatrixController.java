@@ -76,6 +76,22 @@ public class MatrixController {
 
                 // Update the view with the results
                 setMatrixCView(matrixC);
+
+
+                int row = (view.getRowTextField().getText().isEmpty()) ? 0 : Integer.parseInt(view.getRowTextField().getText());
+                int column = (view.getColumnTextField().getText().isEmpty()) ? 0 : Integer.parseInt(view.getColumnTextField().getText());
+
+                if(row >= column) {
+                    // Get floyd value
+                    int floydValue = getFloydValue(row, column);
+
+                    // Set floyd value
+                    view.getItemValueTextField().setText(floydValue + "");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"The Row number cannot be smaller that the Column number.", "Logic Error", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
 
             /**
@@ -174,6 +190,63 @@ public class MatrixController {
 
                 view.getRealCIndex22().setText(matrix.getDataAt(1, 1).getReal() + "");
                 view.getImagCIndex22().setText(matrix.getDataAt(1, 1).getImag() + "");
+            }
+
+            /**
+             * Recursively find the Floyd's value at the given position(row, column).
+             * row = 0, 1, 2, 3, ... and column = 0, 1, 2, 3, ...
+             * @param row
+             * @param column
+             * @return floyds value
+             */
+            private int getFloydValue(int row, int column) {
+                /*
+                 * Before I get into it, let me explain my train of thought. if we write this values down, we can
+                 * see some patterns and relationships between the row, column and value.
+                 *
+                 * Row          Column          Value
+                 * 0            0               1
+                 * 1            0               2
+                 * 1            1               3
+                 * 2            0               4
+                 * 2            1               5
+                 * 2            2               6
+                 * 3            0               7
+                 * 3            1               8
+                 * 3            2               9
+                 * 3            3               10
+                 * 4            0               11
+                 * 4            1               12
+                 * 4            2               13
+                 * 4            3               14
+                 * 4            4               15
+                 *
+                 * We can clearly see that, For all values of Value, Column <= Row. That is, the value of Column never
+                 * exceeds the value of Row.
+                 *
+                 * The base case of this algorithm is Row = 0, Column = 0.
+                 * */
+
+                if(row == 0 && column == 0){
+                    // Base case
+                    return 1;
+                }
+                else {
+                    /*
+                     * We are going to decrement our row and column until we get to the Base case.
+                     * Thus, as we can see see from above, we are going to first decrement the column until its 0.
+                     * When Column - 1 == -1, we know that its time to decrement the Row. At this point the column will
+                     * start counting for the value of the row, that is Column = Row
+                     */
+                    if(column - 1 < 0){
+                        row -= 1;
+                        column = row;
+                        return 1 + getFloydValue(row, column);
+                    }
+                    else{
+                        return 1 + getFloydValue(row, column - 1);
+                    }
+                }
             }
         });
 
